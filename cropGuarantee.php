@@ -2,10 +2,10 @@
 
 require_once "classes/template.php";
 
-require_once "dao/fishermanInsuranceDAO.php";
-require_once "classes/fishermanInsurance.php";
+require_once "dao/cropGuaranteeDAO.php";
+require_once "classes/cropGuarantee.php";
 
-$objet = new fishermanInsuranceDAO();
+$objet = new cropGuaranteeDAO();
 
 $template = new Template();
 
@@ -21,8 +21,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $str_month = (isset($_POST["str_month"]) && $_POST["str_month"] != null) ? $_POST["str_month"] : "";
     $str_year = (isset($_POST["str_year"]) && $_POST["str_year"] != null) ? $_POST["str_year"] : "";
     $db_value = (isset($_POST["db_value"]) && $_POST["db_value"] != null) ? $_POST["db_value"] : "";
-    $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
     $tb_city_id_city = (isset($_POST["tb_city_id_city"]) && $_POST["tb_city_id_city"] != null) ? $_POST["tb_city_id_city"] : "";
+    $tb_beneficiaries_id_beneficiaries = (isset($_POST["tb_beneficiaries_id_beneficiaries"]) && $_POST["tb_beneficiaries_id_beneficiaries"] != null) ? $_POST["tb_beneficiaries_id_beneficiaries"] : "";
+
 
 } elseif (!isset($id)) {
     // Se não se não foi setado nenhum valor para variável $id
@@ -30,38 +31,39 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $str_month = null;
     $str_year = null;
     $db_value = null;
-    $tb_beneficiaries_id_beneficiaries = null;
     $tb_city_id_city = null;
+    $tb_beneficiaries_id_beneficiaries = null;
+
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
-    $fishermanInsurance =  new fishermanInsurance($id, '','','','','');
+    $cropGuarantee =  new cropGuarantee($id, '','','','','' );
 
-    $resultado = $objet->atualizar($fishermanInsurance);
+    $resultado = $objet->atualizar($cropGuarantee);
     $str_month = $resultado->getStrMonth();
     $str_year = $resultado->getStrYear();
     $db_value = $resultado->getDbValue();
-    $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
     $tb_city_id_city = $resultado->getTbCityIdCity();
+    $tb_beneficiaries_id_beneficiaries = $resultado->getTbBeneficiariesIdBeneficiaries();
 }
 
-if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" && $str_year != "" && $db_value != "" && $tb_beneficiaries_id_beneficiaries != "" && $tb_city_id_city != ""){
-    $fishermanInsurance =  new fishermanInsurance($id, $str_month, $str_year, $db_value, $tb_beneficiaries_id_beneficiaries, $tb_city_id_city);
-    $msg = $objet->salvar($fishermanInsurance);
+if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" && $str_year != "" && $db_value != "" && $tb_city_id_city != "" && $tb_beneficiaries_id_beneficiaries != ""){
+    $cropGuarantee =  new cropGuarantee($id, $str_month, $str_year, $db_value, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries);
+    $msg = $objet->salvar($cropGuarantee);
     $id = null;
     $str_month = null;
     $str_year = null;
     $db_value = null;
-    $tb_beneficiaries_id_beneficiaries = null;
     $tb_city_id_city = null;
+    $tb_beneficiaries_id_beneficiaries = null;
 
 }
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
-    $fishermanInsurance =  new fishermanInsurance($id,'','','','','');
-    $msg = $objet->remover($fishermanInsurance);
+    $cropGuarantee =  new cropGuarantee($id,'','','','','');
+    $msg = $objet->remover($cropGuarantee);
     $id = null;
 }
 
@@ -73,8 +75,8 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
             <div class='col-md-12'>
                 <div class='card'>
                     <div class='header'>
-                        <h4 class='title'>Fisherman Insurance</h4>
-                        <p class='category'>List of Fisherman Insurance of the system</p>
+                        <h4 class='title'>Crop Guarantee</h4>
+                        <p class='category'>List of Crop Insurance of the system</p>
 
                     </div>
                     <div class='content table-responsive'>
@@ -102,27 +104,6 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             echo (isset($db_value) && ($db_value != null || $db_value != "")) ? $db_value : '';
                             ?>"/>
 
-                            Beneficiaries:
-                            <select class="form-control" name="$tb_beneficiaries_id_beneficiaries">
-                                <?php
-                                $query = "SELECT * FROM tb_beneficiaries order by $str_name_person;";
-                                $statement = $pdo->prepare($query);
-                                if ($statement->execute()) {
-                                    $result = $statement->fetchAll(PDO::FETCH_OBJ);
-                                    foreach ($result as $rs) {
-                                        if ($rs->id_beneficiaries == $tb_beneficiaries_id_beneficiaries) {
-                                            echo "<option value='$rs->id_beneficiaries' selected>$rs->str_name_person</option>";
-                                        } else {
-                                            echo "<option value='$rs->id_beneficiaries'>$rs->str_name_person</option>";
-                                        }
-                                    }
-                                } else {
-                                    throw new PDOException("<script> alert('Não foi possível executar a declaração SQL !'); </script>");
-                                }
-                                ?>
-                            </select>
-                            <br/>
-
                             City:
                             <select class="form-control" name="tb_city_id_city">
                                 <?php
@@ -135,6 +116,27 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                                             echo "<option value='$rs->id_city' selected>$rs->str_name_city</option>";
                                         } else {
                                             echo "<option value='$rs->id_city'>$rs->str_name_city</option>";
+                                        }
+                                    }
+                                } else {
+                                    throw new PDOException("<script> alert('Não foi possível executar a declaração SQL !'); </script>");
+                                }
+                                ?>
+                            </select>
+                            <br/>
+
+                            Beneficiaries:
+                            <select class="form-control" name="$tb_beneficiaries_id_beneficiaries">
+                                <?php
+                                $query = "SELECT * FROM tb_beneficiaries order by $str_name_person;";
+                                $statement = $pdo->prepare($query);
+                                if ($statement->execute()) {
+                                    $result = $statement->fetchAll(PDO::FETCH_OBJ);
+                                    foreach ($result as $rs) {
+                                        if ($rs->id_beneficiaries == $tb_beneficiaries_id_beneficiaries) {
+                                            echo "<option value='$rs->id_beneficiaries' selected>$rs->str_name_person</option>";
+                                        } else {
+                                            echo "<option value='$rs->id_beneficiaries'>$rs->str_name_person</option>";
                                         }
                                     }
                                 } else {
