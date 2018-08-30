@@ -130,6 +130,18 @@ class Template
                     </a>
                 </li>
                 <li>
+                    <a href='fishermanInsurance.php'>
+                        <i class=\"ti-user\"></i>
+                        <p>Fisherman</p>
+                    </a>
+                </li>
+                 <li>
+                    <a href='cropGuarantee.php'>
+                        <i class=\"ti-user\"></i>
+                        <p>Crop</p>
+                    </a>
+                </li>
+                <li>
                     <a href='files.php'>
                         <i class=\"ti-files\"></i>
                         <p>Files</p>

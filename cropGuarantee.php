@@ -5,7 +5,7 @@ require_once "classes/template.php";
 require_once "dao/cropGuaranteeDAO.php";
 require_once "classes/cropGuarantee.php";
 
-$objet = new cropGuaranteeDAO();
+$object = new cropGuaranteeDAO();
 
 $template = new Template();
 
@@ -128,7 +128,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             Beneficiaries:
                             <select class="form-control" name="$tb_beneficiaries_id_beneficiaries">
                                 <?php
-                                $query = "SELECT * FROM tb_beneficiaries order by $str_name_person;";
+                                $query = "SELECT * FROM tb_beneficiaries order by str_name_person;";
                                 $statement = $pdo->prepare($query);
                                 if ($statement->execute()) {
                                     $result = $statement->fetchAll(PDO::FETCH_OBJ);
