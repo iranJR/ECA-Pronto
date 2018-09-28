@@ -58,7 +58,7 @@ class fishermanInsuranceDAO
     {
         global $pdo;
         try {
-            $statement = $pdo->prepare("SELECT id_tb_fisherman_insurance, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city, FROM tb_fisherman_insurance WHERE id_tb_fisherman_insurance = :id");
+            $statement = $pdo->prepare("SELECT id_tb_fisherman_insurance, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city FROM tb_fisherman_insurance WHERE id_tb_fisherman_insurance = :id");
             $statement->bindValue(":id", $fishermanInsurance->getIdTbFishermanInsurance());
             if ($statement->execute()) {
                 $rs = $statement->fetch(PDO::FETCH_OBJ);
@@ -97,7 +97,7 @@ class fishermanInsuranceDAO
         $linha_inicial = ($pagina_atual - 1) * QTDE_REGISTROS;
 
         /* Instrução de consulta para paginação com MySQL */
-        $sql = "SELECT id_tb_fisherman_insurance, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city, FROM tb_fisherman_insurance LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
+        $sql = "SELECT id_tb_fisherman_insurance, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city FROM tb_fisherman_insurance LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
         $statement = $pdo->prepare($sql);
         $statement->execute();
         $dados = $statement->fetchAll(PDO::FETCH_OBJ);
@@ -136,13 +136,14 @@ class fishermanInsuranceDAO
             echo "
             <table class='table table-striped table-bordered'>
             <thead>
-            <th style='text-transform: uppercase;' class='active'>
             <th style='text-align: center; font-weight: bolder;'>Code</th>
-            <th style='text-align: center; font-weight: bolder;'>Mes</th>
-            <th style='text-align: center; font-weight: bolder;'>Ano</th>
-            <th style='text-align: center; font-weight: bolder;'>Valor</th>
-            <th style='text-align: center; font-weight: bolder;'>Beneficiario</th>
-            <th style='text-align: center; font-weight: bolder;'>Cidade</th>
+            <th style='text-align: center; font-weight: bolder;'>Month</th>
+            <th style='text-align: center; font-weight: bolder;'>Year</th>
+            <th style='text-align: center; font-weight: bolder;'>Value</th>
+            <th style='text-align: center; font-weight: bolder;'>Beneficiaries</th>
+            <th style='text-align: center; font-weight: bolder;'>City</th>
+            <th style='text-align: center; font-weight: bolder;' colspan='2'>Actions</th>
+            
             </thead>
             <tbody>";
                     foreach ($dados as $fish):

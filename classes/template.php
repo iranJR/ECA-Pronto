@@ -142,6 +142,18 @@ class Template
                     </a>
                 </li>
                 <li>
+                    <a href='familyBag.php'>
+                        <i class=\"ti-user\"></i>
+                        <p>Family Bag</p>
+                    </a>
+                </li>
+                <li>
+                    <a href='peti.php'>
+                        <i class=\"ti-user\"></i>
+                        <p>PETI</p>
+                    </a>
+                </li>
+                <li>
                     <a href='files.php'>
                         <i class=\"ti-files\"></i>
                         <p>Files</p>

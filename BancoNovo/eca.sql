@@ -2,9 +2,9 @@ CREATE DATABASE  IF NOT EXISTS `eca` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `eca`;
 -- MySQL dump 10.13  Distrib 5.7.17, for Win64 (x86_64)
 --
--- Host: 127.0.0.1    Database: eca
+-- Host: localhost    Database: eca
 -- ------------------------------------------------------
--- Server version	5.5.5-10.1.34-MariaDB
+-- Server version	5.7.20-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,7 +56,7 @@ CREATE TABLE `tb_beneficiaries` (
   `str_cpf` varchar(14) DEFAULT NULL,
   `int_rgp` int(11) DEFAULT NULL,
   PRIMARY KEY (`id_beneficiaries`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -65,6 +65,7 @@ CREATE TABLE `tb_beneficiaries` (
 
 LOCK TABLES `tb_beneficiaries` WRITE;
 /*!40000 ALTER TABLE `tb_beneficiaries` DISABLE KEYS */;
+INSERT INTO `tb_beneficiaries` VALUES (1,'123','Joaquim Oliveira da Silva','123456789',321654);
 /*!40000 ALTER TABLE `tb_beneficiaries` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +85,7 @@ CREATE TABLE `tb_city` (
   UNIQUE KEY `str_cod_siafi_city_UNIQUE` (`str_cod_siafi_city`),
   KEY `fk_tb_city_tb_state_idx` (`tb_state_id_state`),
   CONSTRAINT `fk_tb_city_tb_state` FOREIGN KEY (`tb_state_id_state`) REFERENCES `tb_state` (`id_state`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +94,75 @@ CREATE TABLE `tb_city` (
 
 LOCK TABLES `tb_city` WRITE;
 /*!40000 ALTER TABLE `tb_city` DISABLE KEYS */;
+INSERT INTO `tb_city` VALUES (1,'Juiz de Fora','357',1);
 /*!40000 ALTER TABLE `tb_city` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_crop_guarantee`
+--
+
+DROP TABLE IF EXISTS `tb_crop_guarantee`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_crop_guarantee` (
+  `id_crop_guarantee` int(11) NOT NULL AUTO_INCREMENT,
+  `str_month` varchar(2) NOT NULL,
+  `str_year` varchar(4) NOT NULL,
+  `db_value` double NOT NULL,
+  `tb_city_id_city` int(11) NOT NULL,
+  `tb_beneficiaries_id_beneficiaries` bigint(20) NOT NULL,
+  PRIMARY KEY (`id_crop_guarantee`),
+  KEY `fk_td_crop_guarantee_tb_city1_idx` (`tb_city_id_city`),
+  KEY `fk_td_crop_guarantee_tb_beneficiaries1_idx` (`tb_beneficiaries_id_beneficiaries`),
+  CONSTRAINT `fk_td_crop_guarantee_tb_beneficiaries1` FOREIGN KEY (`tb_beneficiaries_id_beneficiaries`) REFERENCES `tb_beneficiaries` (`id_beneficiaries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_td_crop_guarantee_tb_city1` FOREIGN KEY (`tb_city_id_city`) REFERENCES `tb_city` (`id_city`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_crop_guarantee`
+--
+
+LOCK TABLES `tb_crop_guarantee` WRITE;
+/*!40000 ALTER TABLE `tb_crop_guarantee` DISABLE KEYS */;
+INSERT INTO `tb_crop_guarantee` VALUES (1,'09','2018',120,1,1);
+/*!40000 ALTER TABLE `tb_crop_guarantee` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `tb_family_bag`
+--
+
+DROP TABLE IF EXISTS `tb_family_bag`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_family_bag` (
+  `id_family_bag` int(11) NOT NULL AUTO_INCREMENT,
+  `str_reference_month` varchar(2) NOT NULL,
+  `str_reference_year` varchar(4) NOT NULL,
+  `str_competence_month` varchar(2) NOT NULL,
+  `str_competence_year` varchar(4) NOT NULL,
+  `dt_date` date NOT NULL,
+  `db_value` double NOT NULL,
+  `tb_beneficiaries_id_beneficiaries` bigint(20) NOT NULL,
+  `tb_city_id_city` int(11) NOT NULL,
+  PRIMARY KEY (`id_family_bag`),
+  KEY `fk_family_bag_td_beneficiaries_idx` (`tb_beneficiaries_id_beneficiaries`),
+  KEY `fk_tb_family_bag_td_city_idx` (`tb_city_id_city`),
+  CONSTRAINT `fk_tb_family_bag_td_city` FOREIGN KEY (`tb_city_id_city`) REFERENCES `tb_city` (`id_city`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_td_family_bag_td_beneficiaries` FOREIGN KEY (`tb_beneficiaries_id_beneficiaries`) REFERENCES `tb_beneficiaries` (`id_beneficiaries`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_family_bag`
+--
+
+LOCK TABLES `tb_family_bag` WRITE;
+/*!40000 ALTER TABLE `tb_family_bag` DISABLE KEYS */;
+INSERT INTO `tb_family_bag` VALUES (2,'05','2017','04','2018','2018-09-22',210,1,1),(3,'05','2017','04','2019','1993-05-25',150,1,1),(4,'05','2017','04','2018','2018-09-22',150,1,1);
+/*!40000 ALTER TABLE `tb_family_bag` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -133,7 +202,7 @@ CREATE TABLE `tb_fisherman_insurance` (
   `id_tb_fisherman_insurance` int(11) NOT NULL AUTO_INCREMENT,
   `str_month` varchar(2) NOT NULL,
   `str_year` varchar(4) NOT NULL,
-  `db_value` varchar(45) NOT NULL,
+  `db_value` double NOT NULL,
   `tb_beneficiaries_id_beneficiaries` bigint(20) NOT NULL,
   `tb_city_id_city` int(11) NOT NULL,
   PRIMARY KEY (`id_tb_fisherman_insurance`),
@@ -141,7 +210,7 @@ CREATE TABLE `tb_fisherman_insurance` (
   KEY `fk_tb_fisherman insurance_tb_city1_idx` (`tb_city_id_city`),
   CONSTRAINT `fk_tb_fisherman insurance_tb_beneficiaries1` FOREIGN KEY (`tb_beneficiaries_id_beneficiaries`) REFERENCES `tb_beneficiaries` (`id_beneficiaries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
   CONSTRAINT `fk_tb_fisherman insurance_tb_city1` FOREIGN KEY (`tb_city_id_city`) REFERENCES `tb_city` (`id_city`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -150,6 +219,7 @@ CREATE TABLE `tb_fisherman_insurance` (
 
 LOCK TABLES `tb_fisherman_insurance` WRITE;
 /*!40000 ALTER TABLE `tb_fisherman_insurance` DISABLE KEYS */;
+INSERT INTO `tb_fisherman_insurance` VALUES (2,'09','2018',120,1,1);
 /*!40000 ALTER TABLE `tb_fisherman_insurance` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -226,6 +296,39 @@ LOCK TABLES `tb_payments` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `tb_peti`
+--
+
+DROP TABLE IF EXISTS `tb_peti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `tb_peti` (
+  `id_peti` int(11) NOT NULL AUTO_INCREMENT,
+  `str_month` varchar(2) NOT NULL,
+  `str_year` varchar(4) NOT NULL,
+  `db_value` double NOT NULL,
+  `str_situation` varchar(20) NOT NULL,
+  `tb_beneficiaries_id_beneficiaries` bigint(20) NOT NULL,
+  `tb_city_id_city` int(11) NOT NULL,
+  PRIMARY KEY (`id_peti`),
+  KEY `fk_tb_peti_tb_beneficiaries_idx` (`tb_beneficiaries_id_beneficiaries`),
+  KEY `fk_tb_peti_tb_city_idx` (`tb_city_id_city`),
+  CONSTRAINT `fk_tb_peti_tb_beneficiaries` FOREIGN KEY (`tb_beneficiaries_id_beneficiaries`) REFERENCES `tb_beneficiaries` (`id_beneficiaries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+  CONSTRAINT `fk_tb_peti_tb_city` FOREIGN KEY (`tb_city_id_city`) REFERENCES `tb_city` (`id_city`) ON DELETE NO ACTION ON UPDATE NO ACTION
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `tb_peti`
+--
+
+LOCK TABLES `tb_peti` WRITE;
+/*!40000 ALTER TABLE `tb_peti` DISABLE KEYS */;
+INSERT INTO `tb_peti` VALUES (1,'05','2017',150,'Sim',1,1);
+/*!40000 ALTER TABLE `tb_peti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `tb_program`
 --
 
@@ -262,7 +365,7 @@ CREATE TABLE `tb_region` (
   `str_name_region` varchar(12) DEFAULT NULL,
   PRIMARY KEY (`id_region`),
   UNIQUE KEY `str_name_region_UNIQUE` (`str_name_region`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -271,6 +374,7 @@ CREATE TABLE `tb_region` (
 
 LOCK TABLES `tb_region` WRITE;
 /*!40000 ALTER TABLE `tb_region` DISABLE KEYS */;
+INSERT INTO `tb_region` VALUES (1,'Sudeste');
 /*!40000 ALTER TABLE `tb_region` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -310,14 +414,12 @@ DROP TABLE IF EXISTS `tb_state`;
 CREATE TABLE `tb_state` (
   `id_state` int(11) NOT NULL AUTO_INCREMENT,
   `str_uf` varchar(2) NOT NULL,
-  `str_name` varchar(19) DEFAULT NULL,
+  `str_name` varchar(19) NOT NULL,
   `tb_region_id_region` int(11) NOT NULL,
   PRIMARY KEY (`id_state`),
-  UNIQUE KEY `str_uf_UNIQUE` (`str_uf`),
-  UNIQUE KEY `str_name_UNIQUE` (`str_name`),
   KEY `fk_tb_state_tb_region1_idx` (`tb_region_id_region`),
   CONSTRAINT `fk_tb_state_tb_region1` FOREIGN KEY (`tb_region_id_region`) REFERENCES `tb_region` (`id_region`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -326,6 +428,7 @@ CREATE TABLE `tb_state` (
 
 LOCK TABLES `tb_state` WRITE;
 /*!40000 ALTER TABLE `tb_state` DISABLE KEYS */;
+INSERT INTO `tb_state` VALUES (1,'MG','Minas Gerais',1);
 /*!40000 ALTER TABLE `tb_state` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -379,39 +482,8 @@ CREATE TABLE `tb_user` (
 
 LOCK TABLES `tb_user` WRITE;
 /*!40000 ALTER TABLE `tb_user` DISABLE KEYS */;
-INSERT INTO `tb_user` VALUES (1,'admin','D033E22AE348AEB5660FC2140AEC35850C4DA997','Daniel','0',0,'danieljfsantos@gmail.com'),(2,'user','12dea96fec20593566ab75692c9949596833adc9','usuario','1',1,'daniel_jflopes@hotmail.com');
+INSERT INTO `tb_user` VALUES (1,'admin','D033E22AE348AEB5660FC2140AEC35850C4DA997','Iran','0',0,'iranfaefid@hotmail.com'),(2,'user','12dea96fec20593566ab75692c9949596833adc9','usuario','1',1,'user@hotmail.com');
 /*!40000 ALTER TABLE `tb_user` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `td_crop_guarantee`
---
-
-DROP TABLE IF EXISTS `td_crop_guarantee`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `td_crop_guarantee` (
-  `id_garantia_safra` int(11) NOT NULL,
-  `str_month` varchar(4) NOT NULL,
-  `str_year` varchar(45) NOT NULL,
-  `db_value` double NOT NULL,
-  `tb_city_id_city` int(11) NOT NULL,
-  `tb_beneficiaries_id_beneficiaries` bigint(20) NOT NULL,
-  PRIMARY KEY (`id_garantia_safra`),
-  KEY `fk_td_crop_guarantee_tb_city1_idx` (`tb_city_id_city`),
-  KEY `fk_td_crop_guarantee_tb_beneficiaries1_idx` (`tb_beneficiaries_id_beneficiaries`),
-  CONSTRAINT `fk_td_crop_guarantee_tb_beneficiaries1` FOREIGN KEY (`tb_beneficiaries_id_beneficiaries`) REFERENCES `tb_beneficiaries` (`id_beneficiaries`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-  CONSTRAINT `fk_td_crop_guarantee_tb_city1` FOREIGN KEY (`tb_city_id_city`) REFERENCES `tb_city` (`id_city`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `td_crop_guarantee`
---
-
-LOCK TABLES `td_crop_guarantee` WRITE;
-/*!40000 ALTER TABLE `td_crop_guarantee` DISABLE KEYS */;
-/*!40000 ALTER TABLE `td_crop_guarantee` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -423,4 +495,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-08-28 10:40:44
+-- Dump completed on 2018-09-21 21:54:14

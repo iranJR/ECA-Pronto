@@ -41,7 +41,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
     $cropGuarantee =  new cropGuarantee($id, '','','','','' );
 
-    $resultado = $objet->atualizar($cropGuarantee);
+    $resultado = $object->atualizar($cropGuarantee);
     $str_month = $resultado->getStrMonth();
     $str_year = $resultado->getStrYear();
     $db_value = $resultado->getDbValue();
@@ -51,7 +51,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" && $str_year != "" && $db_value != "" && $tb_city_id_city != "" && $tb_beneficiaries_id_beneficiaries != ""){
     $cropGuarantee =  new cropGuarantee($id, $str_month, $str_year, $db_value, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries);
-    $msg = $objet->salvar($cropGuarantee);
+    $msg = $object->save($cropGuarantee);
     $id = null;
     $str_month = null;
     $str_year = null;
@@ -63,7 +63,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" &&
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
     $cropGuarantee =  new cropGuarantee($id,'','','','','');
-    $msg = $objet->remover($cropGuarantee);
+    $msg = $object->remove($cropGuarantee);
     $id = null;
 }
 
@@ -126,7 +126,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             <br/>
 
                             Beneficiaries:
-                            <select class="form-control" name="$tb_beneficiaries_id_beneficiaries">
+                            <select class="form-control" name="tb_beneficiaries_id_beneficiaries">
                                 <?php
                                 $query = "SELECT * FROM tb_beneficiaries order by str_name_person;";
                                 $statement = $pdo->prepare($query);

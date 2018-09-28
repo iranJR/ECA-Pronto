@@ -8,7 +8,7 @@ class cropGuaranteeDAO
     public function remove($cg){
         global $pdo;
         try {
-            $statement = $pdo->prepare("DELETE FROM td_crop_guarantee WHERE id_cropGuarantee = :id");
+            $statement = $pdo->prepare("DELETE FROM tb_crop_guarantee WHERE id_crop_guarantee = :id");
             $statement->bindValue(":id", $cg->getIdCropGuarantee());
             if ($statement->execute()) {
                 return "<script> alert('Registo foi excluído com êxito !'); </script>";
@@ -24,10 +24,10 @@ class cropGuaranteeDAO
         global $pdo;
         try {
             if ($cg->getIdCropGuarantee() != "") {
-                $statement = $pdo->prepare("UPDATE td_crop_guarantee SET str_month=:str_month, str_year=:str_year, db_value=:db_value, tb_city_id_city=:tb_city_id_city, tb_beneficiaries_id_beneficiaries=:tb_beneficiaries_id_beneficiaries WHERE id_cropGuarantee = :id;");
+                $statement = $pdo->prepare("UPDATE tb_crop_guarantee SET str_month = :str_month, str_year = :str_year, db_value = :db_value, tb_city_id_city = :tb_city_id_city, tb_beneficiaries_id_beneficiaries = :tb_beneficiaries_id_beneficiaries WHERE id_crop_guarantee = :id ;");
                 $statement->bindValue(":id", $cg->getIdCropGuarantee());
             } else {
-                $statement = $pdo->prepare("INSERT INTO td_crop_guarantee (str_month, str_year, db_value, tb_city_id_city, tb_beneficiaries_id_beneficiaries ) VALUES (:str_month, :str_year, :db_value, :tb_city_id_city, :tb_beneficiaries_id_beneficiaries)");
+                $statement = $pdo->prepare("INSERT INTO tb_crop_guarantee (str_month, str_year, db_value, tb_city_id_city, tb_beneficiaries_id_beneficiaries) VALUES (:str_month, :str_year, :db_value, :tb_city_id_city, :tb_beneficiaries_id_beneficiaries)");
             }
             $statement->bindValue(":str_month",$cg->getStrMonth());
             $statement->bindValue(":str_year",$cg->getStrYear());
@@ -52,11 +52,11 @@ class cropGuaranteeDAO
     public function atualizar($cg){
         global $pdo;
         try {
-            $statement = $pdo->prepare("SELECT * FROM td_crop_guarantee WHERE id_cropGuarantee = :id");
+            $statement = $pdo->prepare("SELECT * FROM tb_crop_guarantee WHERE id_crop_guarantee = :id");
             $statement->bindValue(":id", $cg->getIdCropGuarantee());
             if ($statement->execute()) {
                 $rs = $statement->fetch(PDO::FETCH_OBJ);
-                $cg->setIdCropGuarantee($rs->id_cropGuarantee);
+                $cg->setIdCropGuarantee($rs->id_crop_guarantee);
                 $cg->setStrMonth($rs->str_month);
                 $cg->setStrYear($rs->str_year);
                 $cg->setDbValue($rs->db_value);
@@ -92,13 +92,13 @@ class cropGuaranteeDAO
         // FALTA FAZER ESSE SELECT
 
         /* Instrução de consulta para paginação com MySQL */
-        $sql = "SELECT C.id_city, S.str_uf as tb_state, C.str_name_city, C.str_cod_siafi_city FROM tb_city C INNER JOIN tb_state S ON S.id_state = C.tb_state_id_state LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
+        $sql = "SELECT id_crop_guarantee, str_month, str_year, db_value, tb_beneficiaries_id_beneficiaries, tb_city_id_city FROM tb_crop_guarantee LIMIT {$linha_inicial}, " . QTDE_REGISTROS;
         $statement = $pdo->prepare($sql);
         $statement->execute();
         $dados = $statement->fetchAll(PDO::FETCH_OBJ);
 
         /* Conta quantos registos existem na tabela */
-        $sqlContador = "SELECT COUNT(*) AS total_registros FROM td_crop_guarantee";
+        $sqlContador = "SELECT COUNT(*) AS total_registros FROM tb_crop_guarantee";
         $statement = $pdo->prepare($sqlContador);
         $statement->execute();
         $valor = $statement->fetch(PDO::FETCH_OBJ);
@@ -132,6 +132,7 @@ class cropGuaranteeDAO
      <table class='table table-striped table-bordered'>
      <thead>
        <tr style='text-transform: uppercase;' class='active'>
+        <th style='text-align: center; font-weight: bolder;'>Code</th>
         <th style='text-align: center; font-weight: bolder;'>Month</th>
         <th style='text-align: center; font-weight: bolder;'>Year</th>
         <th style='text-align: center; font-weight: bolder;'>Value</th>
@@ -143,14 +144,14 @@ class cropGuaranteeDAO
      <tbody>";
             foreach ($dados as $cg):
                 echo "<tr>
-        <td style='text-align: center'>$cg->id_cropGuarantee</td>
+        <td style='text-align: center'>$cg->id_crop_guarantee</td>
         <td style='text-align: center'>$cg->str_month</td>
         <td style='text-align: center'>$cg->str_year</td>
         <td style='text-align: center'>$cg->db_value</td>
         <td style='text-align: center'>$cg->tb_city_id_city</td>
         <td style='text-align: center'>$cg->tb_beneficiaries_id_beneficiaries</td>
-        <td style='text-align: center'><a href='?act=upd&id=$cg->id_cropGuarantee' title='Alterar'><i class='ti-reload'></i></a></td>
-        <td style='text-align: center'><a href='?act=del&id=$cg->id_cropGuarantee' title='Remover'><i class='ti-close'></i></a></td>
+        <td style='text-align: center'><a href='?act=upd&id=$cg->id_crop_guarantee' title='Alterar'><i class='ti-reload'></i></a></td>
+        <td style='text-align: center'><a href='?act=del&id=$cg->id_crop_guarantee' title='Remover'><i class='ti-close'></i></a></td>
        </tr>";
             endforeach;
             echo "

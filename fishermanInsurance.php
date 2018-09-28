@@ -39,7 +39,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
     $fishermanInsurance =  new fishermanInsurance($id, '','','','','');
 
-    $resultado = $objet->atualizar($fishermanInsurance);
+    $resultado = $object->atualizar($fishermanInsurance);
     $str_month = $resultado->getStrMonth();
     $str_year = $resultado->getStrYear();
     $db_value = $resultado->getDbValue();
@@ -49,7 +49,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "upd" && $id != "") {
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" && $str_year != "" && $db_value != "" && $tb_beneficiaries_id_beneficiaries != "" && $tb_city_id_city != ""){
     $fishermanInsurance =  new fishermanInsurance($id, $str_month, $str_year, $db_value, $tb_beneficiaries_id_beneficiaries, $tb_city_id_city);
-    $msg = $objet->salvar($fishermanInsurance);
+    $msg = $object->salvar($fishermanInsurance);
     $id = null;
     $str_month = null;
     $str_year = null;
@@ -61,7 +61,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "save" && $str_month != "" &&
 
 if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
     $fishermanInsurance =  new fishermanInsurance($id,'','','','','');
-    $msg = $objet->remover($fishermanInsurance);
+    $msg = $object->remover($fishermanInsurance);
     $id = null;
 }
 
@@ -86,7 +86,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             echo (isset($id) && ($id != null || $id != "")) ? $id : '';
                             ?>"/>
                             Month:
-                            <input class="form-control" type="text" name="str_month" value="<?php
+                            <input class="form-control" type="number" min="1" max="12" name="str_month" value="<?php
                             // Preenche o nome no campo nome com um valor "value"
                             echo (isset($str_month) && ($str_month != null || $str_month != "")) ? $str_month : '';
                             ?>"/>
@@ -103,7 +103,7 @@ if (isset($_REQUEST["act"]) && $_REQUEST["act"] == "del" && $id != "") {
                             ?>"/>
 
                             Beneficiaries:
-                            <select class="form-control" name="$tb_beneficiaries_id_beneficiaries">
+                            <select class="form-control" name="tb_beneficiaries_id_beneficiaries">
                                 <?php
                                 $query = "SELECT * FROM tb_beneficiaries order by str_name_person;";
                                 $statement = $pdo->prepare($query);

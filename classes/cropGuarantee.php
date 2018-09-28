@@ -8,7 +8,7 @@
 
 class cropGuarantee
 {
-    private $id_cropGuarantee;
+    private $id_crop_guarantee;
     private $str_month;
     private $str_year;
     private $db_value;
@@ -26,7 +26,7 @@ class cropGuarantee
      */
     public function __construct($id_cropGuarantee, $str_month, $str_year, $db_value, $tb_city_id_city, $tb_beneficiaries_id_beneficiaries)
     {
-        $this->id_cropGuarantee = $id_cropGuarantee;
+        $this->id_crop_guarantee = $id_cropGuarantee;
         $this->str_month = $str_month;
         $this->str_year = $str_year;
         $this->db_value = $db_value;
@@ -39,15 +39,15 @@ class cropGuarantee
      */
     public function getIdCropGuarantee()
     {
-        return $this->id_cropGuarantee;
+        return $this->id_crop_guarantee;
     }
 
     /**
-     * @param mixed $id_cropGuarantee
+     * @param mixed $id_crop_guarantee
      */
-    public function setIdCropGuarantee($id_cropGuarantee): void
+    public function setIdCropGuarantee($id_crop_guarantee): void
     {
-        $this->id_cropGuarantee = $id_cropGuarantee;
+        $this->id_crop_guarantee = $id_crop_guarantee;
     }
 
     /**
